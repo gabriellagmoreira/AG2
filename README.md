@@ -1,9 +1,3 @@
-Aqui está um exemplo de `README.md` bem estruturado com as informações fornecidas sobre como executar o comando `mysql -u root -p < germancredit.sql` e configurar o ambiente MySQL para o projeto. Ele está formatado em Markdown, ideal para documentação em repositórios como GitHub.
-
----
-
-# README.md
-
 ## Projeto de Análise de Crédito com MySQL e Python
 
 Este projeto utiliza um conjunto de dados de crédito do sul da Alemanha para classificar candidatos a empréstimos como "bom" ou "ruim" usando modelos de machine learning. O banco de dados é configurado no MySQL, e o processamento é feito em Python.
