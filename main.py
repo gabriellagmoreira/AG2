@@ -13,7 +13,7 @@ def load_data_from_mysql():
         conn = mysql.connector.connect(
             host="localhost",
             user="root",  # Seu usuário MySQL
-            password="#Euteamo123",  # Sua senha MySQL
+            password="#",  # Sua senha MySQL
             database="statlog"
         )
         print("Conexão bem-sucedida ao banco de dados 'statlog'!")
