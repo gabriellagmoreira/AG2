@@ -152,4 +152,4 @@ Supondo que o arquivo está em `C:\Users\SeuUsuario\germancredit.sql`:
 3. Digite a senha quando solicitado.
 
 ---
-
+![CMD](https://github.com/GustavoRT-debug/AG2/blob/main/Captura%20de%20tela%202025-04-01%20154011.png)
