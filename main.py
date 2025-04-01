@@ -5,24 +5,41 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, classification_report
 import numpy as np
 
-# Step 1: Connect to MySQL and Load Data
+# Step 1: Connect to MySQL and Load Data with Verification
 def load_data_from_mysql():
-    # Database connection
-    conn = mysql.connector.connect(
-        host="localhost",
-        user="root",  # Replace with your MySQL username
-        password="",  # Replace with your MySQL password
-        database="statlog"
-    )
-    
-    # Query to fetch data
-    query = "SELECT * FROM germancredit"
-    data = pd.read_sql(query, conn)
-    
-    # Close connection
-    conn.close()
-    
-    return data
+    try:
+        # Tentativa de conexão com o banco
+        print("Tentando conectar ao banco de dados MySQL...")
+        conn = mysql.connector.connect(
+            host="localhost",
+            user="root",  # Seu usuário MySQL
+            password="#Euteamo123",  # Sua senha MySQL
+            database="statlog"
+        )
+        print("Conexão bem-sucedida ao banco de dados 'statlog'!")
+
+        # Executar a query
+        query = "SELECT * FROM germancredit"
+        print("Executando a query:", query)
+        data = pd.read_sql(query, conn)
+
+        # Verificar se os dados foram carregados
+        if data.empty:
+            print("Erro: Nenhum dado foi retornado da tabela 'germancredit'!")
+        else:
+            print(f"Dados carregados com sucesso! Número de linhas: {data.shape[0]}, Colunas: {data.shape[1]}")
+            print("Primeiras 5 linhas dos dados:")
+            print(data.head())  # Mostra as primeiras 5 linhas
+
+        # Fechar conexão
+        conn.close()
+        print("Conexão com o banco fechada.")
+        
+        return data
+
+    except mysql.connector.Error as err:
+        print(f"Erro ao conectar ao MySQL: {err}")
+        return None
 
 # Step 2: Preprocess Data
 def preprocess_data(df):
@@ -40,13 +57,13 @@ def split_data(X, y):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     return X_train, X_test, y_train, y_test
 
-# Step 4: Train the Model (Decision Tree)
+# Step 4: Treinar o Modelo Usando 80% dos Dados (Decision Tree)
 def train_model(X_train, y_train):
     model = DecisionTreeClassifier(random_state=42)
     model.fit(X_train, y_train)
     return model
 
-# Step 5: Evaluate the Model
+# Step 5: Avaliar o Modelo com 20% Restantes
 def evaluate_model(model, X_test, y_test):
     y_pred = model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
@@ -90,17 +107,26 @@ def predict_user_input(model):
 # Main Execution
 def main():
     # Load data
-    print("Loading data from MySQL...")
+    print("Iniciando o carregamento dos dados...")
     data = load_data_from_mysql()
-    
+
+    # Verificar se os dados foram carregados corretamente
+    if data is None or data.empty:
+        print("Falha ao carregar os dados. Encerrando o programa.")
+        return
+
     # Preprocess
+    print("\nPré-processando os dados...")
     X, y = preprocess_data(data)
-    
+    print(f"Features (X) shape: {X.shape}")
+    print(f"Target (y) shape: {y.shape}")
+
     # Split data
     X_train, X_test, y_train, y_test = split_data(X, y)
+    print(f"Treino: {X_train.shape[0]} amostras, Teste: {X_test.shape[0]} amostras")
     
     # Train model
-    print("Training the Decision Tree model...")
+    print("\nTraining the Decision Tree model...")
     model = train_model(X_train, y_train)
     
     # Evaluate model
