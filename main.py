@@ -11,7 +11,7 @@ with open('config.json', 'r') as config_file:
     config = json.load(config_file)
     mysql_config = config['mysql']
 
-# Step 1: Connect to MySQL and Load Data with Verification
+# Passo 1: Conectar ao MySQL e Carregar Dados com Verificação
 def load_data_from_mysql():
     try:
         print("Tentando conectar ao banco de dados MySQL...")
@@ -24,7 +24,7 @@ def load_data_from_mysql():
         print("Conexão bem-sucedida ao banco de dados 'statlog'!")
 
         query = "SELECT * FROM germancredit"
-        print("Executando a query:", query)
+        print("Executando a consulta:", query)
         data = pd.read_sql(query, conn)
 
         if data.empty:
@@ -43,32 +43,36 @@ def load_data_from_mysql():
         print(f"Erro ao conectar ao MySQL: {err}")
         return None
 
-# (O resto do código permanece igual ao da Opção 1)
+# Passo 2: Pré-processar Dados
 def preprocess_data(df):
     df = df.drop('id', axis=1)
     X = df.drop('kredit', axis=1)
     y = df['kredit']
     return X, y
 
+# Passo 3: Dividir Dados (80% Treinamento, 20% Teste)
 def split_data(X, y):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     return X_train, X_test, y_train, y_test
 
+# Passo 4: Treinar o Modelo (Árvore de Decisão)
 def train_model(X_train, y_train):
     model = DecisionTreeClassifier(random_state=42)
     model.fit(X_train, y_train)
     return model
 
+# Passo 5: Avaliar o Modelo
 def evaluate_model(model, X_test, y_test):
     y_pred = model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
-    report = classification_report(y_test, y_pred, target_names=['bad', 'good'])
-    print(f"Accuracy: {accuracy:.2f}")
-    print("Classification Report:")
+    report = classification_report(y_test, y_pred, target_names=['ruim', 'bom'])
+    print(f"Acurácia do modelo: {accuracy:.2f}")
+    print("Relatório de Classificação:")
     print(report)
 
+# Passo 6: Entrada do Usuário para Predição
 def predict_user_input(model):
-    print("\nEnter the following details for credit risk prediction:")
+    print("\nInsira os seguintes detalhes para previsão de risco de crédito:")
     user_data = []
     feature_names = [
         'laufkont', 'laufzeit', 'moral', 'verw', 'hoehe', 'sparkont', 'beszeit', 
@@ -78,20 +82,21 @@ def predict_user_input(model):
     
     for feature in feature_names:
         if feature == 'laufkont':
-            print("Status of checking account (1: no account, 2: < 0 DM, 3: 0-200 DM, 4: >= 200 DM)")
+            print("Status da conta corrente (1: sem conta, 2: < 0 DM, 3: 0-200 DM, 4: >= 200 DM)")
         elif feature == 'laufzeit':
-            print("Duration in months (numeric)")
+            print("Duração em meses (numérico)")
         elif feature == 'moral':
-            print("Credit history (0: delay, 1: critical, 2: no credits, 3: paid duly, 4: all paid)")
+            print("Histórico de crédito (0: atraso, 1: crítico, 2: sem créditos, 3: pago regularmente, 4: todos pagos)")
         
-        value = int(input(f"Enter value for {feature}: "))
+        value = int(input(f"Insira o valor para {feature}: "))
         user_data.append(value)
     
     user_data = np.array(user_data).reshape(1, -1)
     prediction = model.predict(user_data)[0]
-    result = "good" if prediction == 1 else "bad"
-    print(f"\nPredicted credit risk: {result}")
+    result = "bom" if prediction == 1 else "ruim"
+    print(f"\nRisco de crédito previsto: {result}")
 
+# Execução Principal
 def main():
     print("Iniciando o carregamento dos dados...")
     data = load_data_from_mysql()
@@ -102,22 +107,22 @@ def main():
 
     print("\nPré-processando os dados...")
     X, y = preprocess_data(data)
-    print(f"Features (X) shape: {X.shape}")
-    print(f"Target (y) shape: {y.shape}")
+    print(f"Forma das características (X): {X.shape}")
+    print(f"Forma do alvo (y): {y.shape}")
 
     X_train, X_test, y_train, y_test = split_data(X, y)
-    print(f"Treino: {X_train.shape[0]} amostras, Teste: {X_test.shape[0]} amostras")
+    print(f"Treinamento: {X_train.shape[0]} amostras, Teste: {X_test.shape[0]} amostras")
     
-    print("\nTraining the Decision Tree model...")
+    print("\nTreinando o modelo de Árvore de Decisão...")
     model = train_model(X_train, y_train)
     
-    print("\nEvaluating the model...")
+    print("\nAvaliando o modelo...")
     evaluate_model(model, X_test, y_test)
     
     while True:
         predict_user_input(model)
-        again = input("\nWould you like to predict another? (yes/no): ").lower()
-        if again != 'yes':
+        again = input("\nDeseja fazer outra previsão? (sim/não): ").lower()
+        if again != 'sim':
             break
 
 if __name__ == "__main__":
