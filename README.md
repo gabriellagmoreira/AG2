@@ -1,3 +1,10 @@
+# Projeto de Análise de Risco de Crédito com MySQL e Python
+ 
+ Este projeto utiliza um conjunto de dados de crédito do sul da Alemanha para classificar candidatos a empréstimos como "bom" ou "ruim" usando modelos de machine learning. O banco de dados é configurado no MySQL, e o processamento é feito em Python.
+ Este projeto utiliza o conjunto de dados *South German Credit* para classificar candidatos a empréstimos como "bom" ou "ruim" usando um modelo de Árvore de Decisão. Os dados são armazenados em um banco MySQL, importados do arquivo `SouthGermanCredit.asc`, e processados em Python com bibliotecas como Pandas e Scikit-learn. A aplicação solicita entradas do usuário para prever o risco de crédito, com validação baseada na tabela de códigos (`codetable.txt`).
+ 
+ Este documento explica como configurar o ambiente MySQL e executar o script `germancredit.sql` para criar e popular o banco de dados.
+ 
 ## Modelo de Classificação
 
 O projeto utiliza o modelo **Árvore de Decisão** (*Decision Tree Classifier*) da biblioteca Scikit-learn, configurado com o parâmetro `random_state=42` para garantir reproducibilidade. Ele é implementado em `src/model.py` e treinado para classificar o risco de crédito com base nas variáveis do conjunto de dados.
