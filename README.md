@@ -131,7 +131,7 @@ Crie `config/config.json`:
     "mysql": {
         "host": "localhost",
         "user": "root",
-        "password": "#Euteamo123",
+        "password": "SUA SENHA",
         "database": "statlog"
     }
 }
