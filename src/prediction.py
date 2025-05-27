@@ -1,7 +1,7 @@
 import numpy as np
 
 def predict_user_input(model):
-    """Obtém entrada do usuário e faz previsão de risco de crédito."""
+    #Obtém entrada do usuário e faz previsão do risco de crédito
     print("\nInsira os seguintes detalhes para previsão de risco de crédito:")
     user_data = []
     feature_names = [
@@ -10,7 +10,7 @@ def predict_user_input(model):
         'wohn', 'bishkred', 'beruf', 'pers', 'telef', 'gastarb'
     ]
     
-    # Definição de descrições e intervalos válidos com base na codetable.txt
+    #Definição de descrições e intervalos na codetable.txt
     feature_info = {
         'laufkont': {
             'description': "Status da conta corrente (1: sem conta, 2: < 0 DM, 3: 0 <= ... < 200 DM, 4: >= 200 DM ou salário por pelo menos 1 ano)",

@@ -15,17 +15,17 @@ def main():
         print("Erro: Configurações do MySQL não encontradas no config.json!")
         return
 
-    # Importar SouthGermanCredit.asc (opcional, se tabela vazia)
-    asc_file_path = "data/SouthGermanCredit.asc"  # Ajuste o caminho conforme necessário
+    # Importar o SouthGermanCredit.asc 
+    asc_file_path = "data/SouthGermanCredit.asc"  
     if not import_asc_to_mysql(asc_file_path, mysql_config):
-        print("Falha ao importar dados. Verifique o arquivo ou a conexão com o banco.")
+        print("Falha ao importar dados")
 
     # Carregar dados do MySQL
     print("Iniciando o carregamento dos dados...")
     data = load_data_from_mysql(mysql_config)
 
     if data is None or data.empty:
-        print("Falha ao carregar os dados. Encerrando o programa.")
+        print("Falha ao carregar os dados...Encerrando o programa.")
         return
 
     # Pré-processar e dividir dados
