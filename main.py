@@ -41,7 +41,6 @@ def main():
     model = train_model(X_train, y_train)
     evaluate_model(model, X_test, y_test)
 
-    # Loop de predição
     while True:
         predict_user_input(model)
         again = input("\nDeseja fazer outra previsão? (sim/não): ").lower()
